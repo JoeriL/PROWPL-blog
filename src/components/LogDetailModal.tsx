@@ -13,7 +13,6 @@ import {
   MessageSquare,
   Tag,
   Edit2,
-  Share2,
 } from "lucide-react";
 import { formatDateDutch, getCategoryBadge, getMoodBadge } from "@/lib/utils";
 

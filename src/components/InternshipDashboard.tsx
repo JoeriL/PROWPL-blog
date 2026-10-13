@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { DailyLog, Contribution, InternshipGoal } from "@/db/schema";
 import { InternshipStats } from "@/lib/types";
 import { Header } from "./Header";
@@ -13,6 +13,7 @@ import { LogFormModal } from "./LogFormModal";
 import { InternshipReportModal } from "./InternshipReportModal";
 import { deleteDailyLog } from "@/lib/actions";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface InternshipDashboardProps {
   initialLogs: DailyLog[];
@@ -31,6 +32,21 @@ export function InternshipDashboard({
 
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
+
+  // Extract all existing tags from logs dynamically
+  const availableTags = useMemo(() => {
+    const set = new Set<string>();
+    initialLogs.forEach((log) => {
+      if (Array.isArray(log.skills)) {
+        log.skills.forEach((s) => {
+          if (typeof s === "string" && s.trim()) {
+            set.add(s.trim());
+          }
+        });
+      }
+    });
+    return Array.from(set).sort((a, b) => a.localeCompare(b));
+  }, [initialLogs]);
 
   // Modals state
   const [viewingLog, setViewingLog] = useState<DailyLog | null>(null);
@@ -102,12 +118,22 @@ export function InternshipDashboard({
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-border/40 py-6 text-center text-xs text-muted-foreground bg-card/40 mt-12">
+      <footer className="border-t border-border/40 py-6 text-center text-xs text-muted-foreground bg-card/40 mt-12 print:hidden">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
           <p>© 2026 PROWPL Stage Logboek • Aertssen NV Stage Portfolio</p>
-          <p className="flex items-center gap-2">
-            <span>Gebouwd met Next.js, TypeScript & Drizzle ORM</span>
-          </p>
+          <div className="flex items-center gap-3">
+            <Link href="/" className="hover:text-foreground transition-colors">
+              Home
+            </Link>
+            <span>•</span>
+            <Link href="/blog" className="hover:text-foreground transition-colors font-medium text-emerald-600">
+              Stage Logboek
+            </Link>
+            <span>•</span>
+            <Link href="/cv" className="hover:text-foreground transition-colors">
+              Mijn CV
+            </Link>
+          </div>
         </div>
       </footer>
 
@@ -121,6 +147,7 @@ export function InternshipDashboard({
       <LogFormModal
         isOpen={isFormOpen}
         editingLog={editingLog}
+        availableTags={availableTags}
         onClose={() => setIsFormOpen(false)}
         onSaved={handleSaved}
       />

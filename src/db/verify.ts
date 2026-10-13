@@ -6,6 +6,9 @@ import {
   createDailyLog,
   updateDailyLog,
   deleteDailyLog,
+  createGoal,
+  updateGoal,
+  deleteGoal,
 } from "../lib/actions";
 
 async function verifyAll() {
@@ -104,6 +107,31 @@ async function verifyAll() {
     throw new Error("Failed to delete daily log");
   }
   console.log("✓ Cleaned up test log successfully");
+
+  // 8. Test Goal CRUD
+  console.log("✓ Testing createGoal...");
+  const newGoalRes = await createGoal({
+    title: "Test Goal for CI/CD",
+    category: "Technical",
+    progress: 25,
+    description: "Temporary goal for automated verification",
+  });
+  if (!newGoalRes.success || !newGoalRes.data) throw new Error("Failed to create goal in test");
+  const testGoalId = newGoalRes.data.id;
+
+  console.log("✓ Testing updateGoal...");
+  const updateGoalRes = await updateGoal(testGoalId, {
+    title: "Updated Test Goal",
+    progress: 100,
+    status: "completed",
+    description: "Updated description",
+  });
+  if (!updateGoalRes.success) throw new Error("Failed to update goal in test");
+
+  console.log("✓ Testing deleteGoal...");
+  const deleteGoalRes = await deleteGoal(testGoalId);
+  if (!deleteGoalRes.success) throw new Error("Failed to delete goal in test");
+  console.log("✓ Goal CRUD operations verified successfully");
 
   console.log("🎉 ALL TESTS & VERIFICATIONS PASSED SUCCESSFULLY!");
 }

@@ -8,33 +8,36 @@ Gebouwd met **Next.js (App Router)**, **TypeScript**, **Drizzle ORM**, een lokal
 
 ## 🌟 Belangrijkste Functionaliteiten
 
-1. **GitHub-achtige Contribution Heatmap Matrix**:
-   - Visualiseert de activiteit over 18 weken met 5 intensiteitsniveaus (0 t/m 4).
-   - Dynamische hover tooltips met uren, aantal prestaties en dagelijkse samenvattingen.
-   - Klik op een specifieke dag om direct alle logboekberichten naar die datum te filteren.
+1. **Professionele Welkomst- & Landingspagina (`/`)**:
+   - Persoonlijke introductie over de stage bij Aertssen NV en het doel van de blog.
+   - Opvallende "Lees de Blog" knop en directe link naar het CV.
+   - Live KPI-statistieken (uren, dagen, realisaties, opdrachten).
+   - Overzicht van de 4 kernstageopdrachten en de enterprise tech stack (C#, Azure, Next.js, EF Core).
+   - Preview van de meest recente dagverslagen.
 
-2. **Dagelijkse Stageverslagen & Realisaties (Daily Logs)**:
+2. **Stage Logboek & Dagverslagen (`/blog`)**:
+   - GitHub-achtige interactieve contribution heatmap matrix over de volledige stageperiode.
    - Uitgebreide blogposts met gestructureerde mijlpalen (bullet points), geleerde lessen, uitdagingen en reflecties.
-   - Categorisering (Onboarding, Feature Development, Architecture, Testing, DevOps, Mentoring).
-   - Gemoedstoestand / flow tracking (Enthousiast 🚀, Productief ⚡, Tevreden ✨, etc.).
-   - Stagementor feedback sectie met speciale badges.
+   - Zoeken, sorteren en filteren op categorieën en vaardigheden.
+   - Mogelijkheid om dagverslagen direct aan te maken, te bewerken en te verwijderen (volledige CRUD).
 
-3. **KPI & Voortgangsmetingen (Internship Analytics)**:
+3. **Mijn CV & Vaardigheden Portfolio (`/cv`)**:
+   - Beknopt, overzichtelijk rapport van verworven technische vaardigheden (Next.js, React, SQLite, Drizzle ORM, C#, Azure, EF Core).
+   - Gedetailleerd overzicht van de belangrijkste realisaties bij Aertssen NV.
+   - **Print- & PDF-vriendelijke lay-out** (@media print): met één klik exporteerbaar als PDF voor sollicitaties en de examencommissie.
+
+4. **KPI & Voortgangsmetingen (Internship Analytics)**:
    - Totaal aantal geregistreerde stage-uren en gemiddelde uren per dag.
    - Totaal gedocumenteerde dagen en streak-indicatoren.
    - Aantal behaalde mijlpalen en top vaardigheden tag-cloud.
 
-4. **Graduaat Leerdoelen & Competenties (Aertssen)**:
+5. **Graduaat Leerdoelen & Competenties (Aertssen)**:
    - Voortgangsbalken en status voor officiële stage-eindtermen.
    - Mogelijkheid om de voortgang per competentie direct bij te werken.
 
-5. **Officieel Print- & PDF-klaar Stageverslag**:
+6. **Officieel Print- & PDF-klaar Stageverslag**:
    - Ingebouwde export-functie voor de graduaatsjury en stagementor.
    - Inclusief samenvatting, urenoverzicht, competentiematrix en handtekeningenveld.
-
-6. **Volledige CRUD met Drizzle ORM**:
-   - Aanmaken, bewerken, bekijken en verwijderen van dagverslagen.
-   - Automatische synchronisatie van de `contributions` tabel en intensiteitsberekening.
 
 ---
 
@@ -97,12 +100,12 @@ Het datamodel is gedefinieerd in [`src/db/schema.ts`](src/db/schema.ts):
 npm install
 ```
 
-### 2. Ontwikkelomgeving starten (Zero-Setup Auto-Import)
-Wanneer je het project voor de eerste keer start na een `git clone` of `git pull`, wordt de SQLite database **automatisch aangemaakt** en worden alle verslagen (`import-data.json`) en doelen (`import-goals.json`) **automatisch geïmporteerd**:
+### 2. Ontwikkelomgeving starten
+De SQLite database (`sqlite.db`) is direct meegeleverd in de repository met alle geregistreerde verslagen en doelen:
 ```bash
 npm run dev
 ```
-Open vervolgens [http://localhost:3000](http://localhost:3000) in je browser. Er zijn geen handmatige migraties of importcommando's nodig!
+Open vervolgens [http://localhost:3000](http://localhost:3000) in je browser.
 
 ---
 
@@ -113,10 +116,8 @@ Open vervolgens [http://localhost:3000](http://localhost:3000) in je browser. Er
 | `npm run dev` | Start de ontwikkelomgeving (voert automatisch `db:init` uit) |
 | `npm run build` | Bouwt de productiebundel (voert automatisch `db:init` uit) |
 | `npm run start` | Start de gebouwde productie applicatie |
-| `npm run db:init` | Initialiseert tabellen en importeert direct `import-data.json` en `import-goals.json` |
+| `npm run db:init` | Waarborgt dat alle tabellen en indexen correct aanwezig zijn |
 | `npm run db:clear` | Maakt alle dagverslagen en contributies leeg uit de database |
-| `npm run db:import` | Importeert/synchroniseert handmatig vanuit `import-data.json` |
-| `npm run db:import:goals` | Importeert handmatig de stageleerdoelen vanuit `import-goals.json` |
 | `npm run db:generate` | Genereert SQL migratiebestanden via Drizzle Kit |
 | `npm run db:push` | Past het schema rechtstreeks toe op de SQLite database |
 | `npm run db:studio` | Start Drizzle Studio GUI om de database visueel te bekijken |

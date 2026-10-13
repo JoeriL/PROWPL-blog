@@ -1,10 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { DailyLog, InternshipGoal } from "@/db/schema";
 import { InternshipStats } from "@/lib/types";
-import { X, Printer, CheckCircle2, Award, Building2 } from "lucide-react";
-import { formatDateDutch } from "@/lib/utils";
+import { X, Printer, Award, Building2 } from "lucide-react";
 
 interface InternshipReportModalProps {
   isOpen: boolean;
@@ -21,11 +20,7 @@ export function InternshipReportModal({
   goals,
   stats,
 }: InternshipReportModalProps) {
-  const [printDate, setPrintDate] = React.useState("");
-
-  React.useEffect(() => {
-    setPrintDate(new Date().toLocaleDateString("nl-NL"));
-  }, []);
+  const [printDate] = useState(() => new Date().toLocaleDateString("nl-NL"));
 
   if (!isOpen) return null;
 

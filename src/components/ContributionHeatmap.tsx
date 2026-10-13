@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useRef } from "react";
 import { Contribution } from "@/db/schema";
 import { addDays, parseISO, isValid, startOfWeek, startOfMonth } from "date-fns";
 import { Calendar, Filter, Sparkles, X } from "lucide-react";
@@ -32,11 +32,8 @@ export function ContributionHeatmap({
   selectedDate,
   onSelectDate,
 }: ContributionHeatmapProps) {
-  const [currentDate, setCurrentDate] = useState<Date | null>(null);
-
-  useEffect(() => {
-    setCurrentDate(new Date());
-  }, []);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [currentDate] = useState<Date>(() => new Date());
 
   const [hoveredCell, setHoveredCell] = useState<{
     date: string;
@@ -191,7 +188,10 @@ export function ContributionHeatmap({
   };
 
   return (
-    <div className="rounded-2xl border border-border/60 bg-card/70 backdrop-blur-md p-4 sm:p-5 shadow-xs relative">
+    <div
+      ref={containerRef}
+      className="rounded-2xl border border-border/60 bg-card/70 backdrop-blur-md p-4 sm:p-5 shadow-xs relative"
+    >
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
         <div>
           <div className="flex items-center gap-2">
@@ -262,15 +262,17 @@ export function ContributionHeatmap({
                         onSelectDate(isSelected ? null : day.date);
                       }}
                       onMouseEnter={(e) => {
+                        if (!containerRef.current) return;
                         const rect = e.currentTarget.getBoundingClientRect();
+                        const containerRect = containerRef.current.getBoundingClientRect();
                         setHoveredCell({
                           date: day.date,
                           activityCount: day.activityCount,
                           hoursLogged: day.hoursLogged,
                           highlight: day.highlight,
                           isFuture: day.isFuture,
-                          x: rect.left + rect.width / 2,
-                          y: rect.top,
+                          x: rect.left - containerRect.left + rect.width / 2,
+                          y: rect.top - containerRect.top,
                         });
                       }}
                       onMouseLeave={() => setHoveredCell(null)}
@@ -310,7 +312,7 @@ export function ContributionHeatmap({
       {/* Floating Tooltip */}
       {hoveredCell && (
         <div
-          className="fixed pointer-events-none z-50 transform -translate-x-1/2 -translate-y-full mb-2 bg-popover/95 backdrop-blur-md text-popover-foreground border border-border shadow-xl rounded-lg px-3 py-2 text-xs max-w-xs transition-opacity duration-150"
+          className="absolute pointer-events-none z-50 transform -translate-x-1/2 -translate-y-full mb-2 bg-popover/95 backdrop-blur-md text-popover-foreground border border-border shadow-xl rounded-lg px-3 py-2 text-xs max-w-xs transition-opacity duration-150"
           style={{
             left: `${hoveredCell.x}px`,
             top: `${hoveredCell.y - 8}px`,

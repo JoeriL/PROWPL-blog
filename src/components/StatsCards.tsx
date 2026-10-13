@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Clock, CalendarCheck, Award, Target, Flame, Code2 } from "lucide-react";
+import { Clock, CalendarCheck, Award, Target, Code2 } from "lucide-react";
 import { InternshipStats } from "@/lib/types";
 
 interface StatsCardsProps {

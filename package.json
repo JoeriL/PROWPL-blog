@@ -15,8 +15,6 @@
     "db:seed": "tsx src/db/seed.ts",
     "db:clear": "tsx src/db/clear.ts",
     "db:studio": "drizzle-kit studio",
-    "db:import": "tsx src/db/import.ts",
-    "db:import:goals": "tsx src/db/import-goals.ts",
     "test:db": "tsx src/db/verify.ts"
   },
   "dependencies": {

@@ -2,13 +2,15 @@
 
 import { db, ensureDbInitialized } from "@/db";
 import { dailyLogs, contributions, internshipGoals } from "@/db/schema";
-import { eq, desc, sql } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { LogFormData, InternshipStats } from "./types";
 
-function safeRevalidatePath(path: string) {
+function safeRevalidatePath(path = "/") {
   try {
     revalidatePath(path);
+    revalidatePath("/blog");
+    revalidatePath("/cv");
   } catch {
     // Gracefully handle CLI/test execution without active request context
   }
@@ -323,5 +325,107 @@ export async function updateGoalProgress(
   } catch (error) {
     console.error("Error updating goal:", error);
     return { success: false, error: "Fout bij bijwerken van stage-doel." };
+  }
+}
+
+/**
+ * Update an existing internship goal completely (title, category, description, progress, status)
+ */
+export async function updateGoal(
+  id: number,
+  data: {
+    title: string;
+    description?: string | null;
+    category?: string;
+    progress?: number;
+    status?: "not_started" | "in_progress" | "completed";
+  }
+) {
+  try {
+    await ensureDbInitialized();
+    const progress =
+      typeof data.progress === "number"
+        ? Math.min(100, Math.max(0, data.progress))
+        : 0;
+    const status =
+      data.status ||
+      (progress === 100 ? "completed" : progress > 0 ? "in_progress" : "not_started");
+
+    await db
+      .update(internshipGoals)
+      .set({
+        title: data.title.trim(),
+        description:
+          data.description !== undefined
+            ? data.description
+              ? data.description.trim()
+              : null
+            : null,
+        category: data.category || "Technical",
+        progress,
+        status,
+        completedDate: status === "completed" ? new Date().toISOString() : null,
+      })
+      .where(eq(internshipGoals.id, id));
+
+    safeRevalidatePath("/");
+    return { success: true };
+  } catch (error) {
+    console.error("Error updating goal:", error);
+    return { success: false, error: "Fout bij bijwerken van stage-doel." };
+  }
+}
+
+/**
+ * Create a new internship goal
+ */
+export async function createGoal(data: {
+  title: string;
+  description?: string;
+  category?: string;
+  progress?: number;
+  status?: "not_started" | "in_progress" | "completed";
+}) {
+  try {
+    await ensureDbInitialized();
+    const progress =
+      typeof data.progress === "number"
+        ? Math.min(100, Math.max(0, data.progress))
+        : 0;
+    const status =
+      data.status || (progress === 100 ? "completed" : "in_progress");
+
+    const [newGoal] = await db
+      .insert(internshipGoals)
+      .values({
+        title: data.title.trim(),
+        description: data.description?.trim() || null,
+        category: data.category || "Technical",
+        status,
+        progress,
+        completedDate: status === "completed" ? new Date().toISOString() : null,
+      })
+      .returning();
+
+    safeRevalidatePath("/");
+    return { success: true, data: newGoal };
+  } catch (error) {
+    console.error("Error creating goal:", error);
+    return { success: false, error: "Fout bij aanmaken van stage-doel." };
+  }
+}
+
+/**
+ * Delete an internship goal
+ */
+export async function deleteGoal(id: number) {
+  try {
+    await ensureDbInitialized();
+    await db.delete(internshipGoals).where(eq(internshipGoals.id, id));
+    safeRevalidatePath("/");
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting goal:", error);
+    return { success: false, error: "Fout bij verwijderen van stage-doel." };
   }
 }
