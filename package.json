@@ -3,10 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "tsx src/db/init.ts",
     "dev": "next dev",
+    "prebuild": "tsx src/db/init.ts",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "db:init": "tsx src/db/init.ts",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
     "db:seed": "tsx src/db/seed.ts",

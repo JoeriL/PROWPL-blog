@@ -1,6 +1,6 @@
 "use server";
 
-import { db } from "@/db";
+import { db, ensureDbInitialized } from "@/db";
 import { dailyLogs, contributions, internshipGoals } from "@/db/schema";
 import { eq, desc, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
@@ -19,6 +19,7 @@ function safeRevalidatePath(path: string) {
  */
 export async function getDailyLogs() {
   try {
+    await ensureDbInitialized();
     return await db.select().from(dailyLogs).orderBy(desc(dailyLogs.date));
   } catch (error) {
     console.error("Error fetching daily logs:", error);
@@ -31,6 +32,7 @@ export async function getDailyLogs() {
  */
 export async function getContributions() {
   try {
+    await ensureDbInitialized();
     return await db.select().from(contributions).orderBy(contributions.date);
   } catch (error) {
     console.error("Error fetching contributions:", error);
@@ -43,6 +45,7 @@ export async function getContributions() {
  */
 export async function getInternshipGoals() {
   try {
+    await ensureDbInitialized();
     return await db.select().from(internshipGoals).orderBy(internshipGoals.id);
   } catch (error) {
     console.error("Error fetching internship goals:", error);
@@ -55,6 +58,7 @@ export async function getInternshipGoals() {
  */
 export async function getInternshipStats(): Promise<InternshipStats> {
   try {
+    await ensureDbInitialized();
     const logs = await db.select().from(dailyLogs).orderBy(desc(dailyLogs.date));
     const goals = await db.select().from(internshipGoals);
 
@@ -137,6 +141,7 @@ function computeIntensity(hoursWorked: number, activityCount: number): number {
  */
 export async function createDailyLog(formData: LogFormData) {
   try {
+    await ensureDbInitialized();
     const activityCount = Math.max(
       1,
       (formData.accomplishments?.length || 0) +
@@ -222,6 +227,7 @@ export async function createDailyLog(formData: LogFormData) {
  */
 export async function updateDailyLog(id: number, formData: LogFormData) {
   try {
+    await ensureDbInitialized();
     const activityCount = Math.max(
       1,
       (formData.accomplishments?.length || 0) +
@@ -278,6 +284,7 @@ export async function updateDailyLog(id: number, formData: LogFormData) {
  */
 export async function deleteDailyLog(id: number) {
   try {
+    await ensureDbInitialized();
     await db.delete(contributions).where(eq(contributions.dailyLogId, id));
     await db.delete(dailyLogs).where(eq(dailyLogs.id, id));
 
@@ -301,6 +308,7 @@ export async function updateGoalProgress(
   status: "not_started" | "in_progress" | "completed"
 ) {
   try {
+    await ensureDbInitialized();
     await db
       .update(internshipGoals)
       .set({

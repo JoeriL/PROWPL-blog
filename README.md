@@ -97,27 +97,12 @@ Het datamodel is gedefinieerd in [`src/db/schema.ts`](src/db/schema.ts):
 npm install
 ```
 
-### 2. Omgevingsvariabelen
-Zorg dat `.env` aanwezig is (staat standaard ingesteld op lokale SQLite):
-```env
-DATABASE_URL="file:sqlite.db"
-```
-
-### 3. Database initialiseren & seeden
-Voer Drizzle migrations uit en vul de database met voorbeelddata voor de stage bij Aertssen:
-```bash
-# Push het schema naar sqlite.db
-npm run db:push
-
-# Vul met realistische stage-verslagen, heatmap data en leerdoelen
-npm run db:seed
-```
-
-### 4. Development server starten
+### 2. Ontwikkelomgeving starten (Zero-Setup Auto-Import)
+Wanneer je het project voor de eerste keer start na een `git clone` of `git pull`, wordt de SQLite database **automatisch aangemaakt** en worden alle verslagen (`import-data.json`) en doelen (`import-goals.json`) **automatisch geïmporteerd**:
 ```bash
 npm run dev
 ```
-Open vervolgens [http://localhost:3000](http://localhost:3000) in je browser.
+Open vervolgens [http://localhost:3000](http://localhost:3000) in je browser. Er zijn geen handmatige migraties of importcommando's nodig!
 
 ---
 
@@ -125,12 +110,15 @@ Open vervolgens [http://localhost:3000](http://localhost:3000) in je browser.
 
 | Script | Beschrijving |
 | :--- | :--- |
-| `npm run dev` | Start de lokale ontwikkelomgeving |
-| `npm run build` | Bouwt de productiebundel met Next.js en Turbopack |
+| `npm run dev` | Start de ontwikkelomgeving (voert automatisch `db:init` uit) |
+| `npm run build` | Bouwt de productiebundel (voert automatisch `db:init` uit) |
 | `npm run start` | Start de gebouwde productie applicatie |
+| `npm run db:init` | Initialiseert tabellen en importeert direct `import-data.json` en `import-goals.json` |
+| `npm run db:clear` | Maakt alle dagverslagen en contributies leeg uit de database |
+| `npm run db:import` | Importeert/synchroniseert handmatig vanuit `import-data.json` |
+| `npm run db:import:goals` | Importeert handmatig de stageleerdoelen vanuit `import-goals.json` |
 | `npm run db:generate` | Genereert SQL migratiebestanden via Drizzle Kit |
 | `npm run db:push` | Past het schema rechtstreeks toe op de SQLite database |
-| `npm run db:seed` | Populeert de database met realistische Aertssen stageverslagen |
 | `npm run db:studio` | Start Drizzle Studio GUI om de database visueel te bekijken |
 | `npm run test:db` | Voert de geautomatiseerde end-to-end verificatietest uit |
 
