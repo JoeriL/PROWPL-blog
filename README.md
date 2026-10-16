@@ -52,47 +52,6 @@ Gebouwd met **Next.js (App Router)**, **TypeScript**, **Drizzle ORM**, een lokal
 
 ---
 
-## 🗄️ Database Schema
-
-Het datamodel is gedefinieerd in [`src/db/schema.ts`](src/db/schema.ts):
-
-- **`daily_logs`**:
-  - `id`: Unieke primaire sleutel (autoincrement)
-  - `date`: Unieke datum (`YYYY-MM-DD`)
-  - `title`: Titel van het verslag
-  - `summary`: Beknopte samenvatting
-  - `content`: Volledig logboekbericht (Markdown ondersteund)
-  - `hoursWorked`: Gewerkte uren (bijv. 8.0)
-  - `category`: Categorie van de werkzaamheden
-  - `mood`: Gemoedstoestand van de stagedag
-  - `accomplishments`: JSON-array van voltooide taken en mijlpalen
-  - `skills`: JSON-array van gebruikte technologieën
-  - `challenges`: Uitdagingen en obstakels
-  - `learnings`: Geleerde lessen en reflectie
-  - `mentorFeedback`: Feedback van de Aertssen stagementor
-  - `isPublished`: Publicatiestatus
-  - `createdAt`, `updatedAt`: Tijdstempels
-
-- **`contributions`**:
-  - `id`: Primaire sleutel
-  - `date`: Unieke datum (`YYYY-MM-DD`)
-  - `activityCount`: Aantal activiteiten / commits / taken
-  - `intensityLevel`: Niveau 0 t/m 4 voor heatmap kleuring
-  - `hoursLogged`: Geregistreerde uren
-  - `highlight`: Belangrijkste prestatie of titel voor de tooltip
-  - `dailyLogId`: Foreign key naar `daily_logs.id`
-
-- **`internship_goals`**:
-  - `id`: Primaire sleutel
-  - `title`: Doelstelling / competentie
-  - `description`: Beschrijving
-  - `category`: Categorie (Technisch, Architectuur, Soft Skills, etc.)
-  - `status`: Status (`not_started`, `in_progress`, `completed`)
-  - `progress`: Voortgangspercentage (0-100%)
-  - `targetDate`, `completedDate`: Datums
-
----
-
 ## 🚀 Aan de slag
 
 ### 1. Repository klonen en afhankelijkheden installeren
@@ -106,22 +65,6 @@ De SQLite database (`sqlite.db`) is direct meegeleverd in de repository met alle
 npm run dev
 ```
 Open vervolgens [http://localhost:3000](http://localhost:3000) in je browser.
-
----
-
-## 📜 Beschikbare Scripts
-
-| Script | Beschrijving |
-| :--- | :--- |
-| `npm run dev` | Start de ontwikkelomgeving (voert automatisch `db:init` uit) |
-| `npm run build` | Bouwt de productiebundel (voert automatisch `db:init` uit) |
-| `npm run start` | Start de gebouwde productie applicatie |
-| `npm run db:init` | Waarborgt dat alle tabellen en indexen correct aanwezig zijn |
-| `npm run db:clear` | Maakt alle dagverslagen en contributies leeg uit de database |
-| `npm run db:generate` | Genereert SQL migratiebestanden via Drizzle Kit |
-| `npm run db:push` | Past het schema rechtstreeks toe op de SQLite database |
-| `npm run db:studio` | Start Drizzle Studio GUI om de database visueel te bekijken |
-| `npm run test:db` | Voert de geautomatiseerde end-to-end verificatietest uit |
 
 ---
 

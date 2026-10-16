@@ -48,27 +48,24 @@ export function Header({ onNewLog, onOpenReport }: HeaderProps) {
             <div className="flex md:hidden items-center gap-1">
               <Link
                 href="/"
-                className={`p-2 rounded-lg text-xs font-medium ${
-                  isHome ? "bg-emerald-500/10 text-emerald-600" : "text-muted-foreground"
-                }`}
+                className={`p-2 rounded-lg text-xs font-medium ${isHome ? "bg-emerald-500/10 text-emerald-600" : "text-muted-foreground"
+                  }`}
                 title="Home"
               >
                 <Home className="w-4 h-4" />
               </Link>
               <Link
                 href="/blog"
-                className={`p-2 rounded-lg text-xs font-medium ${
-                  isBlog ? "bg-emerald-500/10 text-emerald-600" : "text-muted-foreground"
-                }`}
+                className={`p-2 rounded-lg text-xs font-medium ${isBlog ? "bg-emerald-500/10 text-emerald-600" : "text-muted-foreground"
+                  }`}
                 title="Blog"
               >
                 <BookOpen className="w-4 h-4" />
               </Link>
               <Link
                 href="/cv"
-                className={`p-2 rounded-lg text-xs font-medium ${
-                  isCv ? "bg-emerald-500/10 text-emerald-600" : "text-muted-foreground"
-                }`}
+                className={`p-2 rounded-lg text-xs font-medium ${isCv ? "bg-emerald-500/10 text-emerald-600" : "text-muted-foreground"
+                  }`}
                 title="CV"
               >
                 <User className="w-4 h-4" />
@@ -78,9 +75,8 @@ export function Header({ onNewLog, onOpenReport }: HeaderProps) {
 
           {/* Navigation Links & Actions */}
           <div
-            className={`items-center justify-end gap-3 sm:gap-4 ${
-              hasActions ? "flex" : "hidden md:flex"
-            }`}
+            className={`items-center justify-end gap-3 sm:gap-4 ${hasActions ? "flex" : "hidden md:flex"
+              }`}
           >
             {/* Contextual Action Buttons (e.g. on /blog) */}
             {hasActions && (
@@ -96,7 +92,7 @@ export function Header({ onNewLog, onOpenReport }: HeaderProps) {
                   </button>
                 )}
 
-                {onNewLog && (
+                {/* {onNewLog && (
                   <button
                     onClick={onNewLog}
                     className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-medium bg-emerald-600 hover:bg-emerald-500 text-white shadow-xs transition-all cursor-pointer"
@@ -104,7 +100,7 @@ export function Header({ onNewLog, onOpenReport }: HeaderProps) {
                     <Plus className="w-3.5 h-3.5" />
                     <span>Nieuw Verslag</span>
                   </button>
-                )}
+                )} */}
               </div>
             )}
 
@@ -112,11 +108,10 @@ export function Header({ onNewLog, onOpenReport }: HeaderProps) {
             <nav className="hidden md:flex items-center gap-1 bg-muted/50 p-1 rounded-xl border border-border/50 text-xs font-medium">
               <Link
                 href="/"
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${
-                  isHome
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${isHome
                     ? "bg-background text-foreground shadow-xs font-semibold"
                     : "text-muted-foreground hover:text-foreground hover:bg-background/50"
-                }`}
+                  }`}
               >
                 <Home className="w-3.5 h-3.5 text-emerald-500" />
                 <span>Home</span>
@@ -124,11 +119,10 @@ export function Header({ onNewLog, onOpenReport }: HeaderProps) {
 
               <Link
                 href="/blog"
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${
-                  isBlog
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${isBlog
                     ? "bg-background text-foreground shadow-xs font-semibold"
                     : "text-muted-foreground hover:text-foreground hover:bg-background/50"
-                }`}
+                  }`}
               >
                 <BookOpen className="w-3.5 h-3.5 text-emerald-500" />
                 <span>Stage Logboek</span>
@@ -136,11 +130,10 @@ export function Header({ onNewLog, onOpenReport }: HeaderProps) {
 
               <Link
                 href="/cv"
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${
-                  isCv
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${isCv
                     ? "bg-background text-foreground shadow-xs font-semibold"
                     : "text-muted-foreground hover:text-foreground hover:bg-background/50"
-                }`}
+                  }`}
               >
                 <Briefcase className="w-3.5 h-3.5 text-emerald-500" />
                 <span>Mijn CV & Skills</span>
