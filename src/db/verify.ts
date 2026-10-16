@@ -42,7 +42,7 @@ async function verifyAll() {
   if (stats.totalAccomplishments <= 0) throw new Error("Expected accomplishments > 0");
 
   // 5. Test creating a new daily log
-  const testDate = "2026-10-14";
+  const testDate = "2099-01-01";
   const existingTestLogs = logs.filter((l) => l.date === testDate);
   for (const l of existingTestLogs) {
     await deleteDailyLog(l.id);

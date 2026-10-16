@@ -25,8 +25,12 @@ export async function ensureTablesExist() {
     );
   `);
 
+  // Allow multiple blog post entries per date while maintaining fast queries
   await client.execute(`
-    CREATE UNIQUE INDEX IF NOT EXISTS daily_logs_date_unique ON daily_logs (date);
+    DROP INDEX IF EXISTS daily_logs_date_unique;
+  `);
+  await client.execute(`
+    CREATE INDEX IF NOT EXISTS daily_logs_date_idx ON daily_logs (date);
   `);
 
   await client.execute(`

@@ -6,7 +6,7 @@ import { relations } from "drizzle-orm";
  */
 export const dailyLogs = sqliteTable("daily_logs", {
   id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
-  date: text("date").notNull().unique(), // YYYY-MM-DD format
+  date: text("date").notNull(), // YYYY-MM-DD format
   title: text("title").notNull(),
   summary: text("summary").notNull(),
   content: text("content").notNull(), // Markdown / full journal text

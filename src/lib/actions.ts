@@ -65,7 +65,8 @@ export async function getInternshipStats(): Promise<InternshipStats> {
     const goals = await db.select().from(internshipGoals);
 
     const totalHours = logs.reduce((sum, log) => sum + (log.hoursWorked || 0), 0);
-    const totalDays = logs.length;
+    const uniqueDates = new Set(logs.map((log) => log.date));
+    const totalDays = uniqueDates.size;
 
     let totalAccomplishments = 0;
     const skillCounts: Record<string, number> = {};
@@ -139,28 +140,74 @@ function computeIntensity(hoursWorked: number, activityCount: number): number {
 }
 
 /**
+ * Synchronize daily contribution record for a specific date across all daily logs
+ */
+export async function syncContributionForDate(date: string) {
+  const dayLogs = await db
+    .select()
+    .from(dailyLogs)
+    .where(eq(dailyLogs.date, date));
+
+  if (dayLogs.length === 0) {
+    await db.delete(contributions).where(eq(contributions.date, date));
+    return;
+  }
+
+  const totalHours = dayLogs.reduce((sum, l) => sum + (l.hoursWorked || 0), 0);
+  const totalActivities = dayLogs.reduce((sum, l) => {
+    const accCount = Array.isArray(l.accomplishments) ? l.accomplishments.length : 0;
+    const skillCount = Array.isArray(l.skills) && l.skills.length > 0 ? 1 : 0;
+    return sum + Math.max(1, accCount + skillCount);
+  }, 0);
+  const intensityLevel = computeIntensity(totalHours, totalActivities);
+  const highlight = dayLogs.map((l) => l.title).join(" | ");
+
+  const existingContrib = await db
+    .select()
+    .from(contributions)
+    .where(eq(contributions.date, date))
+    .limit(1);
+
+  if (existingContrib.length > 0) {
+    await db
+      .update(contributions)
+      .set({
+        activityCount: totalActivities,
+        intensityLevel,
+        hoursLogged: totalHours,
+        highlight,
+        dailyLogId: dayLogs[0].id,
+        updatedAt: new Date().toISOString(),
+      })
+      .where(eq(contributions.date, date));
+  } else {
+    await db.insert(contributions).values({
+      date,
+      activityCount: totalActivities,
+      intensityLevel,
+      hoursLogged: totalHours,
+      highlight,
+      dailyLogId: dayLogs[0].id,
+    });
+  }
+}
+
+/**
  * Create a new daily log and sync with the contribution heatmap
  */
 export async function createDailyLog(formData: LogFormData) {
   try {
     await ensureDbInitialized();
-    const activityCount = Math.max(
-      1,
-      (formData.accomplishments?.length || 0) +
-        (formData.skills?.length ? 1 : 0)
-    );
-    const intensityLevel = computeIntensity(formData.hoursWorked, activityCount);
 
-    const existingLog = await db
+    const existingLogs = await db
       .select()
       .from(dailyLogs)
-      .where(eq(dailyLogs.date, formData.date))
-      .limit(1);
+      .where(eq(dailyLogs.date, formData.date));
 
-    if (existingLog.length > 0) {
+    if (existingLogs.some((l) => l.title.trim().toLowerCase() === formData.title.trim().toLowerCase())) {
       return {
         success: false,
-        error: `Er bestaat al een stageverslag voor datum ${formData.date}. Kies een andere datum of bewerk het bestaande verslag.`,
+        error: `Er bestaat al een stageverslag met de titel "${formData.title}" op ${formData.date}.`,
       };
     }
 
@@ -183,35 +230,8 @@ export async function createDailyLog(formData: LogFormData) {
       })
       .returning();
 
-    // Check if contribution entry already exists for this date
-    const existingContrib = await db
-      .select()
-      .from(contributions)
-      .where(eq(contributions.date, formData.date))
-      .limit(1);
-
-    if (existingContrib.length > 0) {
-      await db
-        .update(contributions)
-        .set({
-          activityCount,
-          intensityLevel,
-          hoursLogged: formData.hoursWorked,
-          highlight: formData.title,
-          dailyLogId: inserted.id,
-          updatedAt: new Date().toISOString(),
-        })
-        .where(eq(contributions.date, formData.date));
-    } else {
-      await db.insert(contributions).values({
-        date: formData.date,
-        activityCount,
-        intensityLevel,
-        hoursLogged: formData.hoursWorked,
-        highlight: formData.title,
-        dailyLogId: inserted.id,
-      });
-    }
+    // Synchronize daily contribution heatmap entry
+    await syncContributionForDate(formData.date);
 
     safeRevalidatePath("/");
     return { success: true, data: inserted };
@@ -230,12 +250,12 @@ export async function createDailyLog(formData: LogFormData) {
 export async function updateDailyLog(id: number, formData: LogFormData) {
   try {
     await ensureDbInitialized();
-    const activityCount = Math.max(
-      1,
-      (formData.accomplishments?.length || 0) +
-        (formData.skills?.length ? 1 : 0)
-    );
-    const intensityLevel = computeIntensity(formData.hoursWorked, activityCount);
+
+    const [existing] = await db
+      .select()
+      .from(dailyLogs)
+      .where(eq(dailyLogs.id, id))
+      .limit(1);
 
     const [updated] = await db
       .update(dailyLogs)
@@ -257,18 +277,11 @@ export async function updateDailyLog(id: number, formData: LogFormData) {
       .where(eq(dailyLogs.id, id))
       .returning();
 
-    // Update corresponding contribution
-    await db
-      .update(contributions)
-      .set({
-        activityCount,
-        intensityLevel,
-        hoursLogged: formData.hoursWorked,
-        highlight: formData.title,
-        dailyLogId: id,
-        updatedAt: new Date().toISOString(),
-      })
-      .where(eq(contributions.dailyLogId, id));
+    // Sync contributions for current date and old date if changed
+    await syncContributionForDate(formData.date);
+    if (existing && existing.date !== formData.date) {
+      await syncContributionForDate(existing.date);
+    }
 
     safeRevalidatePath("/");
     return { success: true, data: updated };
@@ -282,13 +295,21 @@ export async function updateDailyLog(id: number, formData: LogFormData) {
 }
 
 /**
- * Delete a daily log entry and remove its contribution
+ * Delete a daily log entry and remove or recalculate its contribution
  */
 export async function deleteDailyLog(id: number) {
   try {
     await ensureDbInitialized();
-    await db.delete(contributions).where(eq(contributions.dailyLogId, id));
-    await db.delete(dailyLogs).where(eq(dailyLogs.id, id));
+    const [toDelete] = await db
+      .select()
+      .from(dailyLogs)
+      .where(eq(dailyLogs.id, id))
+      .limit(1);
+
+    if (toDelete) {
+      await db.delete(dailyLogs).where(eq(dailyLogs.id, id));
+      await syncContributionForDate(toDelete.date);
+    }
 
     safeRevalidatePath("/");
     return { success: true };
