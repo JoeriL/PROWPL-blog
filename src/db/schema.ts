@@ -97,3 +97,18 @@ export type NewContribution = typeof contributions.$inferInsert;
 
 export type InternshipGoal = typeof internshipGoals.$inferSelect;
 export type NewInternshipGoal = typeof internshipGoals.$inferInsert;
+
+/**
+ * Notes and descriptions associated with individual pictures in public/Pictures/.
+ */
+export const pictureNotes = sqliteTable("picture_notes", {
+  id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+  webPath: text("web_path").notNull().unique(), // e.g. "/Pictures/BlueDolphin/sample.svg"
+  note: text("note").notNull().default(""),
+  updatedAt: text("updated_at")
+    .notNull()
+    .$defaultFn(() => new Date().toISOString()),
+});
+
+export type PictureNote = typeof pictureNotes.$inferSelect;
+export type NewPictureNote = typeof pictureNotes.$inferInsert;

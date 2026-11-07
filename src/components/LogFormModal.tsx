@@ -17,6 +17,9 @@ import {
   AlertCircle,
   ChevronDown,
   Check,
+  Code2,
+  Image as ImageIcon,
+  ExternalLink,
 } from "lucide-react";
 import { createDailyLog, updateDailyLog } from "@/lib/actions";
 
@@ -642,13 +645,61 @@ export function LogFormModal({
 
           {/* Full Content (Markdown) */}
           <div>
-            <label className="block text-xs font-medium text-foreground mb-1">
-              Uitgebreide Toelichting & Logboek Details (Markdown ondersteund){" "}
-              <span className="text-rose-500">*</span>
-            </label>
+            <div className="flex items-center justify-between mb-1.5 flex-wrap gap-2">
+              <label className="block text-xs font-medium text-foreground">
+                Uitgebreide Toelichting & Logboek Details (Markdown ondersteund){" "}
+                <span className="text-rose-500">*</span>
+              </label>
+
+              <div className="flex items-center gap-1.5 text-[11px]">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const snippet = "\n\n```csharp\n// Code snippet hier\n```\n";
+                    setFormData((prev) => ({
+                      ...prev,
+                      content: (prev.content || "") + snippet,
+                    }));
+                  }}
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-muted hover:bg-muted/80 text-foreground border border-border/70 cursor-pointer"
+                  title="Voeg code block template in"
+                >
+                  <Code2 className="w-3 h-3 text-purple-500" />
+                  <span>+ Code Snippet</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    const imgTemplate = "\n\n![Omschrijving](/Pictures/submap/afbeelding.png)\n";
+                    setFormData((prev) => ({
+                      ...prev,
+                      content: (prev.content || "") + imgTemplate,
+                    }));
+                  }}
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-muted hover:bg-muted/80 text-foreground border border-border/70 cursor-pointer"
+                  title="Voeg afbeelding template in"
+                >
+                  <ImageIcon className="w-3 h-3 text-emerald-500" />
+                  <span>+ Afbeelding</span>
+                </button>
+
+                <a
+                  href="/pictures"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-emerald-600 hover:text-emerald-500 hover:underline"
+                  title="Bekijk de Pictures tab voor afbeelding links"
+                >
+                  <span>Pictures Tab</span>
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </div>
+            </div>
+
             <textarea
               required
-              rows={5}
+              rows={6}
               placeholder="Beschrijf hier je uitgevoerde werkzaamheden, architectuurbeslissingen of code wijzigingen..."
               value={formData.content}
               onChange={(e) => setFormData({ ...formData, content: e.target.value })}

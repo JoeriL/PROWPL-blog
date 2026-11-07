@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Plus, FileText, BookOpen, Home, User, Briefcase } from "lucide-react";
+import { FileText, BookOpen, Home, User, Briefcase, Image as ImageIcon } from "lucide-react";
 
 interface HeaderProps {
   onNewLog?: () => void;
@@ -16,6 +16,7 @@ export function Header({ onNewLog, onOpenReport }: HeaderProps) {
   const isHome = pathname === "/";
   const isBlog = pathname === "/blog";
   const isCv = pathname === "/cv";
+  const isPictures = pathname === "/pictures";
 
   const hasActions = Boolean(onNewLog || onOpenReport);
 
@@ -69,6 +70,14 @@ export function Header({ onNewLog, onOpenReport }: HeaderProps) {
                 title="CV"
               >
                 <User className="w-4 h-4" />
+              </Link>
+              <Link
+                href="/pictures"
+                className={`p-2 rounded-lg text-xs font-medium ${isPictures ? "bg-emerald-500/10 text-emerald-600" : "text-muted-foreground"
+                  }`}
+                title="Pictures"
+              >
+                <ImageIcon className="w-4 h-4" />
               </Link>
             </div>
           </div>
@@ -137,6 +146,17 @@ export function Header({ onNewLog, onOpenReport }: HeaderProps) {
               >
                 <Briefcase className="w-3.5 h-3.5 text-emerald-500" />
                 <span>Mijn CV & Skills</span>
+              </Link>
+
+              <Link
+                href="/pictures"
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition-all ${isPictures
+                    ? "bg-background text-foreground shadow-xs font-semibold"
+                    : "text-muted-foreground hover:text-foreground hover:bg-background/50"
+                  }`}
+              >
+                <ImageIcon className="w-3.5 h-3.5 text-emerald-500" />
+                <span>Pictures</span>
               </Link>
             </nav>
           </div>

@@ -65,6 +65,15 @@ export async function ensureTablesExist() {
       created_at text NOT NULL
     );
   `);
+
+  await client.execute(`
+    CREATE TABLE IF NOT EXISTS picture_notes (
+      id integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+      web_path text NOT NULL UNIQUE,
+      note text DEFAULT '' NOT NULL,
+      updated_at text NOT NULL
+    );
+  `);
 }
 
 /**

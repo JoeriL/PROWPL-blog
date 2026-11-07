@@ -15,6 +15,7 @@ import {
   Edit2,
 } from "lucide-react";
 import { formatDateDutch, getCategoryBadge, getMoodBadge } from "@/lib/utils";
+import { MarkdownContent } from "./MarkdownContent";
 
 interface LogDetailModalProps {
   log: DailyLog | null;
@@ -102,8 +103,8 @@ export function LogDetailModal({ log, onClose, onEdit }: LogDetailModalProps) {
             <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
               Uitgebreid Logboekverslag
             </h4>
-            <div className="prose prose-sm dark:prose-invert max-w-none p-4 rounded-xl bg-background border border-border/60 whitespace-pre-wrap font-sans leading-relaxed text-foreground/90">
-              {log.content}
+            <div className="p-4 rounded-xl bg-background border border-border/60">
+              <MarkdownContent content={log.content} />
             </div>
           </div>
 
