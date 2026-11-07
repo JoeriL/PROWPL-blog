@@ -1,1 +1,114 @@
-[]
+[
+    {
+        "date": "2026-11-02",
+        "title": "Start BlueDolphin Project & Models",
+        "summary": "Gestart met het BlueDolphin project, API response models gemaakt en testprojecten opgeschoond.",
+        "content": "Bluedolphin project begonnen met models te maken voor de API responses en models voor de Odata van de bluedolphin aertssen app. (ook de nodige unit tests). opkuisen van testproject en bijhorende pipelines en library groups",
+        "hoursWorked": 8.0,
+        "category": "Feature Development",
+        "mood": "productive",
+        "accomplishments": [
+            "BlueDolphin project opgestart",
+            "Models gemaakt voor API responses en OData integratie",
+            "Bijhorende unit tests geschreven voor de nieuwe models",
+            "Bestaand testproject, pipelines en library groups opgekuist"
+        ],
+        "skills": [
+            "C#",
+            "OData",
+            "API Design",
+            "Unit Testing"
+        ],
+        "challenges": "",
+        "learnings": "",
+        "mentorFeedback": ""
+    },
+    {
+        "date": "2026-11-03",
+        "title": ".NET 10 Upgrade & CI/CD Setup",
+        "summary": ".NET 10 upgrade afgerond en geprobeerd de CI/CD pipeline in orde te brengen, maar vastgelopen op NuGet versies.",
+        "content": "afwerken .net 10 upgrade in bluedolphin project en CI CD pipeline in orde brengen. Moeite met nuget package versions",
+        "hoursWorked": 8.0,
+        "category": "DevOps & CI/CD",
+        "mood": "challenged",
+        "accomplishments": [
+            ".NET 10 upgrade voltooid in het BlueDolphin project",
+            "Gestart met de configuratie van de CI/CD pipeline"
+        ],
+        "skills": [
+            ".NET 10",
+            "CI/CD",
+            "NuGet"
+        ],
+        "challenges": "Moeilijkheden met het oplossen van NuGet package versie conflicten tijdens de setup.",
+        "learnings": "",
+        "mentorFeedback": ""
+    },
+    {
+        "date": "2026-11-04",
+        "title": "NuGet Fixes & Pipeline Troubleshooting",
+        "summary": "NuGet problemen opgelost, permissies in orde gebracht en verder gewerkt aan datamodellen.",
+        "content": "nuget problemen opgelost. CI/CD pipeline troubleshooten. permissions in orde brengen. Verder models maken.",
+        "hoursWorked": 8.0,
+        "category": "DevOps & CI/CD",
+        "mood": "productive",
+        "accomplishments": [
+            "NuGet versie conflicten succesvol opgelost",
+            "CI/CD pipeline verder getroubleshoot",
+            "Ontbrekende permissies in orde gebracht",
+            "Extra models ontwikkeld voor de BlueDolphin integratie"
+        ],
+        "skills": [
+            "DevOps",
+            "NuGet",
+            "Troubleshooting",
+            "C#"
+        ],
+        "challenges": "Permissie-issues en hardnekkige pipeline errors vereisten actieve troubleshooting.",
+        "learnings": "",
+        "mentorFeedback": ""
+    },
+    {
+        "date": "2026-11-05",
+        "title": "CD Pipeline & Function App Fixes",
+        "summary": "Uitgebreid gewerkt aan het draaiend krijgen van de CD pipeline en offline runnen van de Function App.",
+        "content": "proberen CD pipeline te laten werken. moeilijk omdat de functionapp niet offline wilt runnen. 20 minuten voor het einde van de dag werkt het",
+        "hoursWorked": 8.0,
+        "category": "DevOps & CI/CD",
+        "mood": "satisfied",
+        "accomplishments": [
+            "Oplossing gevonden voor het lokaal/offline draaien van de Function App",
+            "CD pipeline succesvol werkende gekregen net voor het einde van de werkdag"
+        ],
+        "skills": [
+            "CI/CD",
+            "Azure Functions",
+            "Troubleshooting"
+        ],
+        "challenges": "Function App wilde initieel niet offline runnen, wat het testen van de pipeline zwaar vertraagde.",
+        "learnings": "",
+        "mentorFeedback": ""
+    },
+    {
+        "date": "2026-11-06",
+        "title": "Logic App Setup & Package Upgrades",
+        "summary": "Laatste pipeline afgerond door een Logic App in te stellen en alle pakketten naar de laatste versie geüpdatet.",
+        "content": "laatste pipeline werkende gekregen door logic app op te zetten. nuget packages geupgrade naar laatste versie en de nodige testen aangepast.",
+        "hoursWorked": 8.0,
+        "category": "DevOps & CI/CD",
+        "mood": "productive",
+        "accomplishments": [
+            "Laatste CI/CD pipeline werkend gekregen via de configuratie van een Logic App",
+            "Alle NuGet packages geüpgraded naar de nieuwste versies",
+            "Bestaande unittests aangepast zodat ze slagen met de nieuwe package versies"
+        ],
+        "skills": [
+            "Azure Logic Apps",
+            "NuGet",
+            "Unit Testing"
+        ],
+        "challenges": "",
+        "learnings": "",
+        "mentorFeedback": ""
+    }
+]
