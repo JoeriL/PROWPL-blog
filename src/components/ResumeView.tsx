@@ -288,7 +288,7 @@ export function ResumeView({ stats, goals }: ResumeViewProps) {
                                   : "bg-blue-500/10 text-blue-600"
                                 }`}
                             >
-                              {goal.status === "completed" ? (goal.title.includes("3/3") ? "3/3 (100%)" : "Voltooid") : `${goal.progress}%`}
+                              {goal.status === "completed" ? (goal.title.match(/\d+\/\d+/) ? `${goal.title.match(/\d+\/\d+/)![0]} (100%)` : "Voltooid") : `${goal.progress}%`}
                             </span>
                           </div>
                           {goal.description && (

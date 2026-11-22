@@ -258,8 +258,8 @@ export function LandingPage({ stats, goals, recentLogs }: LandingPageProps) {
                           <>
                             <CheckCircle2 className="w-3.5 h-3.5" />
                             <span>
-                              {goal.title.includes("3/3")
-                                ? "Voltooid (3/3 • 100%)"
+                              {goal.title.match(/\d+\/\d+/)
+                                ? `Voltooid (${goal.title.match(/\d+\/\d+/)![0]} • 100%)`
                                 : "Voltooid (100%)"}
                             </span>
                           </>
