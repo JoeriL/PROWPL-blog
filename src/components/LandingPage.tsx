@@ -214,7 +214,7 @@ export function LandingPage({ stats, goals, recentLogs }: LandingPageProps) {
                   Mijn Stageopdrachten bij Aertssen NV
                 </h2>
                 <p className="text-xs sm:text-sm text-muted-foreground">
-                  Binnen het Monitoring project werk ik aan vier kernopdrachten ter ondersteuning van
+                  Binnen het Monitoring project werk ik aan vijf kernopdrachten ter ondersteuning van
                   het development en infrastructuur team.
                 </p>
               </div>
@@ -257,7 +257,11 @@ export function LandingPage({ stats, goals, recentLogs }: LandingPageProps) {
                         {goal.status === "completed" ? (
                           <>
                             <CheckCircle2 className="w-3.5 h-3.5" />
-                            <span>Voltooid (100%)</span>
+                            <span>
+                              {goal.title.includes("3/3")
+                                ? "Voltooid (3/3 • 100%)"
+                                : "Voltooid (100%)"}
+                            </span>
                           </>
                         ) : goal.status === "in_progress" ? (
                           <>

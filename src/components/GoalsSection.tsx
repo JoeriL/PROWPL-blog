@@ -298,7 +298,11 @@ export function GoalsSection({ goals }: GoalsSectionProps) {
                         {isCompleted ? (
                           <>
                             <CheckCircle2 className="w-3 h-3 text-emerald-500" />
-                            <span>Voltooid</span>
+                            <span>
+                              {goal.title.includes("3/3")
+                                ? "Voltooid (3/3 • 100%)"
+                                : "Voltooid"}
+                            </span>
                           </>
                         ) : (
                           <>
